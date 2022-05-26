@@ -22,9 +22,9 @@ class ContactFactory extends Factory
             'email'=>$this->faker->email(),
             'address'=>$this->faker->address(),
             'phone'=>$this->faker->phoneNumber(),
-            'company_id'=>Company::pluck('id')->random()
-            // 'created_at'=>now(),
-            // 'updated_at'=>now()
+            'company_id'=>Company::pluck('id')->random(),
+             'created_at'=>now(),
+             'updated_at'=>now()
         ];
     }
 }
