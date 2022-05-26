@@ -24,10 +24,12 @@ class ContactTableSeeder extends Seeder
                 'last_name'=>$faker->lastName(),
                 'email'=>$faker->email(),
                 'address'=>$faker->address(),
-                'phone'=>$faker->numerify('###-###-####'),
+                'phone'=>$faker->phoneNumber(),
                 'created_at'=>now(),
                 'updated_at'=>now()
             ];
+
+            //php artisan db:seed --class ContactTableSeeder
             
         }
         DB::table('contacts')->insert($contacts);
