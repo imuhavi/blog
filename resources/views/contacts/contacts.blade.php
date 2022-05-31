@@ -58,6 +58,9 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @if($message = session('message'))
+                      <div class="alert alert-success">{{ $message }}</div>
+                    @endif
                     @if($contacts->count())
                       @foreach($contacts as $index =>$contact) 
                               <tr>
@@ -79,7 +82,7 @@
                   </tbody>
                 </table> 
 
-                {{$contacts->links()}}
+                {{$contacts->appends(request()->only('company_id'))->links()}}
               </div>
             </div>
           </div>

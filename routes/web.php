@@ -17,12 +17,10 @@ use App\Http\Controllers\ContactController;
 Route::get('/', function () {
     return view('welcome');
 });
- route::get('/contacts',[ContactController::class, 
- 'index'])->name('contacts.contact');
+ route::get('/contacts',[ContactController::class, 'index'])->name('contacts.contact');
+ route::post('/contacts',[ContactController::class, 'store'])->name('contacts.store');
 
- route::post('/contacts/create',[ContactController::class, 
- 'create'])->name('contacts.create');
+ route::get('/contacts/create',[ContactController::class, 'create'])->name('contacts.create');
 
- route::get('/contacts/{id}',[ContactController::class, 
- 'show'])->name('contacts.show');
+ route::get('/contacts/{id}',[ContactController::class, 'show'])->name('contacts.show');
 
