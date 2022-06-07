@@ -64,7 +64,7 @@
                     <div class="form-group row">
                       <label for="company_id" class="col-md-3 col-form-label">Company</label>
                       <div class="col-md-9">
-                        <select name="company_id" value="{{ old('company_id',$contact->company->company_id) }}"  id="company_id" class="form-control @error('company_id') is-invalid @enderror">
+                        <select name="company_id" value="{{ old('company_id',$contact->company_id) }}"  id="company_id" class="form-control @error('company_id') is-invalid @enderror">
                         @error('company_id') 
                         <div class="invalid-feedback">
                           {{ $message }}

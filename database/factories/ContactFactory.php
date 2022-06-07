@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Company;
+use App\Models\User;
 
 class ContactFactory extends Factory
 {
@@ -24,7 +25,9 @@ class ContactFactory extends Factory
             'phone'=>$this->faker->phoneNumber(),
             'company_id'=>Company::pluck('id')->random(),
              'created_at'=>now(),
-             'updated_at'=>now()
+             'updated_at'=>now(),
+             //'user_id'=> User::factory()
+             //'user_id' => Company::find(Company::pluck('id')->random())->user_id
         ];
     }
 }

@@ -13,3 +13,31 @@ document.querySelectorAll('.btn-delete').forEach((button)=>{
         }
     })
 })
+let btnClear = document.getElementById('btn-clear')
+if (btnClear) {
+    btnClear.addEventListener('click', () => {
+        let input = document.getElementById('search'),
+            select = document.getElementById('filter_company_id')
+
+        if (input) input.value = ""
+        if (select) select.selectedIndex = 0
+
+        window.location.href = window.location.href.split('?')[0]
+    })
+}
+
+const toggleClearButton = () => {
+    let query = location.search,
+        pattern = /[?&]search=/,
+        button = document.getElementById('btn-clear')
+
+    // if (!button) return;
+
+    if (pattern.test(query)) {
+        button.style.display = "block"
+    } else {
+        button.style.display = "none"
+    }
+}
+
+toggleClearButton()
