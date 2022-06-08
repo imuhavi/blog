@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Settings\AccountController;
 
@@ -20,6 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard',[HomeController::class, 'index'])->name('home');
+
 Route::middleware(['auth','verified'])->group(function () {
  route::get('/contacts',[ContactController::class, 'index'])->name('contacts.contact');
  route::post('/contacts',[ContactController::class, 'store'])->name('contacts.store');
@@ -38,7 +40,7 @@ Route::middleware(['auth','verified'])->group(function () {
  route::get('/contacts/{id}/edit',[ContactController::class, 
  'edit'])->name('contacts.edit');
 });
-
+Route::resource('/companies', CompanyController::class);
  Auth::routes(['verify'=>true]);
  Route::get('/settings/account', [AccountController::class, 'index']);
 
