@@ -11,6 +11,7 @@ class AccountController extends Controller
     {
         $this->middleware(['auth', 'password.confirm']);
     }
+
     public function index()
     {
         return "<h1>Account Settings</h1>";

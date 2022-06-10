@@ -2,93 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Contact;
 use App\Models\Company;
+use App\Models\Contact;
+use Illuminate\Http\Request;
+use App\Http\Requests\ContactRequest;
 
 class ContactController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth','verified']);
+        $this->middleware(['auth', 'verified']);
     }
+
     public function index()
     {
-        $user = auth()->user();
-        $companies=$user->companies()->orderBy('name')->pluck('name','id')->prepend('All Companies', '');
-       
-        $contacts=$user->contacts()->orderBy('id','desc')->where(function($query){
-            if($companyId=request('company_id')){
-                $query->where('company_id', $companyId);
-            }
-            if($search=request('search')){
-                $query->where('first_name', 'LIKE', "%{$search}%");
-            }
-        })->paginate(10);
-        return view('contacts.contacts', compact('contacts','companies'));
+        $companies = Company::userCompanies();
+        // \DB::enableQueryLog();
+        $contacts = auth()->user()->contacts()->with('company')->latestFirst()->paginate(10);
+        // dd(\DB::getQueryLog());
+        return view('contacts.index', compact('contacts', 'companies'));
     }
 
     public function create()
     {
         $contact = new Contact();
-        $companies=auth()->user()->companies()->orderBy('name')->pluck('name','id')->
-        prepend('All Companies', '');
+        $companies = Company::userCompanies();
 
         return view('contacts.create', compact('companies', 'contact'));
-
     }
-    public function show($id)
-    {
-        $contact= Contact::findOrFail($id);
-        return view('contacts.show', compact('contact'));
-    }
-    public function store(Request $request)
-    {
 
-        //dd($request->all()); 
-        $request->validate([
-            'first_name'=>'required',
-            'last_name'=>'required',
-            'email'=>'required|email',
-            'address'=>'required',
-            'phone'=>'required',
-            'company_id'=>'required|exists:companies,id',
-        ]);
-        
-        
+    public function store(ContactRequest $request)
+    {
         $request->user()->contacts()->create($request->all());
 
-        return redirect()->route('contacts.contact')->with('message', 'Contact has been added succesfully');
+        return redirect()->route('contacts.index')->with('message', "Contact has been added successfully");
     }
-    public function edit($id)
+
+    public function edit(Contact $contact)
     {
-        $contact=Contact::findOrFail($id);
-        $companies=auth()->user()->companies()->orderBy('name')->pluck('name','id')->prepend('All Companies', '');
+        $companies = Company::userCompanies();
 
-        return view('contacts.edit', compact('contact','companies'));
-
-        
+        return view('contacts.edit', compact('companies', 'contact'));
     }
-    public function update($id, Request $request)
+
+    public function update(Contact $contact, ContactRequest $request)
     {
-        $request->validate([
-            'first_name'=>'required',
-            'last_name'=>'required',
-            'email'=>'required|email',
-            'address'=>'required',
-            'phone'=>'required',
-            'company_id'=>'required|exists:companies,id',
-        ]);
-        
-        $contact=Contact::findOrFail($id);
         $contact->update($request->all());
 
-        return redirect()->route('contacts.contact')->with('message', 'Contact has been updated succesfully');
+        return redirect()->route('contacts.index')->with('message', "Contact has been updated successfully");
     }
-    public function destroy($id)
+
+    public function show(Contact $contact)
     {
-        $contact=Contact::findOrFail($id);
+        return view('contacts.show', compact('contact'));
+    }
+
+    public function destroy(Contact $contact)
+    {
         $contact->delete();
-        return back()->with('message', 'Contact has been deleted succesfully');
+
+        return redirect()->route('contacts.index')->with('message', "Contact has been deleted successfully");
     }
 }

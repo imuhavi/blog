@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -18,9 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'email', 'password', 'first_name', 'last_name', 'bio', 'company', 'profile_picture'
     ];
 
     /**
@@ -48,5 +47,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function companies()
     {
         return $this->hasMany(Company::class);
+    }
+    public function fullName()
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
+    public function profileUrl()
+    {
+        return Storage::exists($this->profile_picture) ? Storage::url($this->profile_picture) : 'http://via.placeholder.com/150x150';
     }
 }
