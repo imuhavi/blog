@@ -1,3 +1,4 @@
+``
 clone the project git clone https://github.com/imuhavi/blog.git .
 cd blog.
 copy the env.example by writing cp env.example .env.
